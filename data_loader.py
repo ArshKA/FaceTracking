@@ -20,8 +20,7 @@ class CelebADataset(Dataset):
         self.split_df = pd.read_csv(f'{root_dir}/list_eval_partition.csv', index_col='image_id')
         self.attr_df = self.attr_df.map(lambda x: 0 if x == -1 else 1)
         self.attr_df['Facial_Hair'] = self.attr_df['5_o_Clock_Shadow'] | (1-self.attr_df['No_Beard']) | self.attr_df['Sideburns'] | self.attr_df['Goatee']
-        self.attr_df.drop(['5_o_Clock_Shadow', 'No_Beard', 'Sideburns', 'Goatee', 'Wearing_Necklace', 'Attractive', 'Wearing_Earrings'], axis=1)
-        print(self.attr_df.columns)
+        self.attr_df = self.attr_df.drop(['5_o_Clock_Shadow', 'No_Beard', 'Sideburns', 'Goatee', 'Wearing_Necklace', 'Attractive', 'Wearing_Earrings'], axis=1)
         self.image_files = []
         for img_name in self.attr_df.index.tolist():
             img_path = os.path.join(self.image_path, img_name)
