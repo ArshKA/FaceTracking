@@ -10,7 +10,8 @@ import numpy as np
 
 detector = MTCNN()
 
-def process_video(path):
+def process_video(path, prediction_model):
+
 
     cap = cv2.VideoCapture(path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -45,7 +46,7 @@ def process_video(path):
 
                     embedding = np.array(DeepFace.represent(detected_face, model_name='Facenet512', enforce_detection=False)[0]['embedding'])
                     all_embeddings.append(embedding)
-                    predictions.append(np.random.random(10))
+                    predictions.append(prediction_model.predict(detected_face))
                     # all_embeddings.append(np.append(embedding, i/5))
                     face_counts[-1] += 1
                     history[i].append((len(all_embeddings)-1, (x, y, w, h)))
