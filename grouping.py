@@ -2,7 +2,6 @@ import numpy as np
 
 def group_bbox(frame_dict, labels):
     result_dict = {label: {} for label in np.unique(labels) if label >= 0}
-    print(result_dict)
 
     for frame_id, bbox_list in frame_dict.items():
         for label_idx, bbox in bbox_list:
@@ -26,3 +25,18 @@ def group_probabilities(probs, labels):
 
     averages = class_probabilities / np.expand_dims(counts, axis=1)
     return averages
+
+
+def process_predictions(predictions, threshold=0.5):
+    prediction_names = ["a", "b", "c", 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+
+    processed_predictions = {}
+
+    for label_id, label_predictions in enumerate(predictions):
+        processed_predictions[label_id] = []
+
+        for prediction_id, prob in enumerate(label_predictions):
+            if prob > threshold:
+                processed_predictions[label_id].append(prediction_names[prediction_id])
+
+    return processed_predictions
