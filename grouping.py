@@ -27,8 +27,7 @@ def group_probabilities(probs, labels):
     return averages
 
 
-def process_predictions(predictions, threshold=0.5):
-    prediction_names = ["a", "b", "c", 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+def process_predictions(predictions, attributes, threshold=0.5):
 
     processed_predictions = {}
 
@@ -37,6 +36,6 @@ def process_predictions(predictions, threshold=0.5):
 
         for prediction_id, prob in enumerate(label_predictions):
             if prob > threshold:
-                processed_predictions[label_id].append(prediction_names[prediction_id])
+                processed_predictions[label_id].append(attributes[prediction_id])
 
     return processed_predictions
