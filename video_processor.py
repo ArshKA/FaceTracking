@@ -5,15 +5,12 @@ import imutils
 from tqdm import tqdm
 
 import numpy as np
-from clustering import cluster_and_plot, cluster_and_plot_gmm, cluster_and_plot_optics, cluster_and_plot_dpgmm
 
 
 
 detector = MTCNN()
 
 def process_video(path):
-
-
 
     cap = cv2.VideoCapture(path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -60,9 +57,10 @@ def process_video(path):
     cap.release()
     cv2.destroyAllWindows()
 
+    all_embeddings = np.array(all_embeddings)
+    predictions = np.array(predictions)
 
-
-    return all_embeddings, predictions, face_counts
+    return history, all_embeddings, predictions, face_counts
 
 
 
