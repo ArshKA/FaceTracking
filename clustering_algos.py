@@ -24,8 +24,8 @@ def cosine_distance(X, Y):
   return cos_sim
 
 def cluster_and_plot(data, min_clusters=1, min_samples=1):
-    # reducer = umap.UMAP(n_components=2)
-    reducer = PCA(n_components=2)
+    reducer = umap.UMAP(n_components=2)
+    # reducer = PCA(n_components=2)
     reduced_data = reducer.fit_transform(data)
 
     # Cluster the data using HDBSCAN
@@ -57,11 +57,12 @@ def cluster_and_plot(data, min_clusters=1, min_samples=1):
 
 
 def cluster_and_plot_optics(data, min_samples, xi=0.05, min_cluster_size=0.05):
-    reducer = PCA(n_components=2)
+    # reducer = PCA(n_components=2)
+    reducer = umap.UMAP(n_components=2)
     reduced_data = reducer.fit_transform(data)
 
     # Cluster the data using OPTICS
-    optics_model = OPTICS(min_samples=min_samples, xi=xi, min_cluster_size=min_cluster_size)
+    optics_model = OPTICS(min_samples=min_samples)
     optics_model.fit(data)
     labels = optics_model.labels_
 
@@ -89,7 +90,8 @@ def cluster_and_plot_optics(data, min_samples, xi=0.05, min_cluster_size=0.05):
     return labels
 
 def cluster_and_plot_dpgmm(data, n_components):
-    reducer = PCA(n_components=2)
+    # reducer = PCA(n_components=2)
+    reducer = umap.UMAP(n_components=2)
     reduced_data = reducer.fit_transform(data)
 
     # Cluster the data using DPGMM
@@ -122,7 +124,9 @@ def cluster_and_plot_dpgmm(data, n_components):
 
 
 def cluster_and_plot_gmm(data, n_components):
-    reducer = PCA(n_components=2)
+    # reducer = PCA(n_components=2)
+    reducer = umap.UMAP(n_components=2)
+
     reduced_data = reducer.fit_transform(data)
 
     # Cluster the data using GMM
