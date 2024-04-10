@@ -29,7 +29,7 @@ def cluster_and_plot(data, min_clusters=1, min_samples=1):
     reduced_data = reducer.fit_transform(data)
 
     # Cluster the data using HDBSCAN
-    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_clusters, min_samples=min_samples, allow_single_cluster=True)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_clusters, min_samples=min_samples, allow_single_cluster=True, cluster_selection_epsilon=1)
     labels = clusterer.fit_predict(data)
 
     # Plot the clustered data
