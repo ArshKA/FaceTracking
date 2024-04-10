@@ -36,5 +36,5 @@ class CelebADataset(Dataset):
         image = Image.open(img_name)
         if self.transform:
             image = self.transform(image)
-        attributes = self.attr_df.iloc[idx, :].values.astype('float32')
+        attributes = self.attr_df.loc[self.image_files[idx]].values.astype('float32')
         return image, torch.tensor(attributes)
