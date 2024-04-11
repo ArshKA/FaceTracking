@@ -5,7 +5,7 @@ def group_bbox(frame_dict, labels):
 
     for frame_id, bbox_list in frame_dict.items():
         for label_idx, bbox in bbox_list:
-            if label_idx >= 0:
+            if labels[label_idx] >= 0:
                 result_dict[labels[label_idx]][frame_id] = bbox
 
     return result_dict
