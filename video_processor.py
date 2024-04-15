@@ -10,15 +10,13 @@ import numpy as np
 
 detector = MTCNN()
 
-def process_video(path, prediction_model):
+def process_video(path, prediction_model, step=24):
 
 
     cap = cv2.VideoCapture(path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-    i = 0
-
-    # Get total frames
+    frame_count = 0
 
     all_embeddings = []
     predictions = []
@@ -28,31 +26,35 @@ def process_video(path, prediction_model):
     with tqdm(total=total_frames) as pbar:
         while cap.isOpened():
             ret, frame = cap.read()
-
-            if not ret or i > 10:
+            # if i<cap.get(cv2.CAP_PROP_FPS)*32:
+            #     continue
+            if not ret or frame_count>cap.get(cv2.CAP_PROP_FPS)*1:
                 break
 
-            frame = imutils.resize(frame, width=1024)
+            # frame = imutils.resize(frame, width=1024)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
             detections = detector.detect_faces(frame)
             face_counts.append(0)
-            history[i] = []
+            history[frame_count] = []
             for detection in detections:
                 confidence = detection["confidence"]
-                if confidence > 0.8:
+                if confidence > 0.9:
                     x, y, w, h = detection["box"]
+                    if (h*w)<1200:
+                        continue
+
+
                     detected_face = frame[int(y):int(y+h), int(x):int(x+w)]
 
                     embedding = np.array(DeepFace.represent(detected_face, model_name='Facenet512', enforce_detection=False)[0]['embedding'])
                     all_embeddings.append(embedding)
                     predictions.append(prediction_model.predict(detected_face))
-                    # all_embeddings.append(np.append(embedding, i/5))
                     face_counts[-1] += 1
-                    history[i].append((len(all_embeddings)-1, (x, y, w, h)))
+                    history[frame_count].append((len(all_embeddings)-1, (x, y, w, h)))
 
             pbar.update(1)
-            i += 1
+            frame_count += step
+            cap.set(cv2.CAP_PROP_POS_FRAMES, frame_count)
 
     # Release resources
     cap.release()
