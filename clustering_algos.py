@@ -47,7 +47,7 @@ def cluster_hdbscan(data, min_clusters=1, min_samples=1, plot_data=False):
         plot(data, labels, 'HDBSCAN')
     return labels
 
-def cluster_and_plot_optics(data, min_samples, xi=0.05, min_cluster_size=0.05, plot_data=False):
+def cluster_optics(data, min_samples, plot_data=False):
     optics_model = OPTICS(min_samples=min_samples)
     optics_model.fit_predict(data)
     labels = optics_model.labels_
@@ -57,7 +57,7 @@ def cluster_and_plot_optics(data, min_samples, xi=0.05, min_cluster_size=0.05, p
 
     return labels
 
-def cluster_and_plot_dpgmm(data, n_components, plot_data=False):
+def cluster_dpgmm(data, n_components, plot_data=False):
     dpgmm_model = mixture.BayesianGaussianMixture(n_components=n_components, covariance_type='full', max_iter=1000)
     dpgmm_model.fit(data)
     labels = dpgmm_model.predict(data)
@@ -67,7 +67,7 @@ def cluster_and_plot_dpgmm(data, n_components, plot_data=False):
 
     return labels
 
-def cluster_and_plot_gmm(data, n_components, plot_data=False):
+def cluster_gmm(data, n_components, plot_data=False):
     gmm_model = mixture.GaussianMixture(n_components=n_components, covariance_type='full', max_iter=1000)
     gmm_model.fit(data)
     labels = gmm_model.predict(data)
