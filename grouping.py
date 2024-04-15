@@ -12,16 +12,17 @@ def group_bbox(frame_dict, labels):
 
 
 def group_probabilities(probs, labels):
-    if len(labels) != len(probs):
-        raise ValueError(f'Dimentions of labels {labels.shape} does not match probabilities {probs.shape}')
+    if len(probs) < 1:
+        raise Exception("No class predictions")
 
     labels_count = max(labels) + 1
-    class_probabilities = np.zeros((labels_count, probs.shape[1]))
+    class_probabilities = np.zeros((labels_count, len(list(probs.values())[0])))
     counts = np.zeros(labels_count)
 
     for i in range(len(labels)):
-        class_probabilities[labels[i]] += probs[i]
-        counts[labels[i]] += 1
+        if i in probs:
+            class_probabilities[labels[i]] += probs[i]
+            counts[labels[i]] += 1
 
     averages = class_probabilities / np.expand_dims(counts, axis=1)
     return averages
