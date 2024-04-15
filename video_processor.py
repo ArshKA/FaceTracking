@@ -1,7 +1,6 @@
 from mtcnn import MTCNN
 from deepface import DeepFace
 import cv2
-import imutils
 from tqdm import tqdm
 
 import numpy as np
@@ -10,16 +9,17 @@ import numpy as np
 
 detector = MTCNN()
 
-def process_video(path, prediction_model, step=24):
+def process_video(path, prediction_model, step=24, end=None, pred_freq = .2):
 
 
     cap = cv2.VideoCapture(path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     frame_count = 0
+    pred_idx = 0
 
     all_embeddings = []
-    predictions = []
+    predictions = {}
     history = {}
     face_counts = []
 
@@ -28,7 +28,7 @@ def process_video(path, prediction_model, step=24):
             ret, frame = cap.read()
             # if i<cap.get(cv2.CAP_PROP_FPS)*32:
             #     continue
-            if not ret or frame_count>cap.get(cv2.CAP_PROP_FPS)*1:
+            if not ret or (end and frame_count>cap.get(cv2.CAP_PROP_FPS)*end):
                 break
 
             # frame = imutils.resize(frame, width=1024)
@@ -46,11 +46,15 @@ def process_video(path, prediction_model, step=24):
 
                     detected_face = frame[int(y):int(y+h), int(x):int(x+w)]
 
+
+
                     embedding = np.array(DeepFace.represent(detected_face, model_name='Facenet512', enforce_detection=False)[0]['embedding'])
                     all_embeddings.append(embedding)
-                    predictions.append(prediction_model.predict(detected_face))
+                    if np.random.random() < pred_freq:
+                        predictions[pred_idx] = prediction_model.predict(detected_face)
                     face_counts[-1] += 1
-                    history[frame_count].append((len(all_embeddings)-1, (x, y, w, h)))
+                    history[frame_count].append((pred_idx, (x, y, w, h)))
+                    pred_idx += 1
 
             pbar.update(1)
             frame_count += step
@@ -61,7 +65,6 @@ def process_video(path, prediction_model, step=24):
     cv2.destroyAllWindows()
 
     all_embeddings = np.array(all_embeddings)
-    predictions = np.array(predictions)
 
     return history, all_embeddings, predictions, face_counts
 
