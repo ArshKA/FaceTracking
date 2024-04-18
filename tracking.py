@@ -20,7 +20,7 @@ class VideoProcessor:
                      'Young', 'Facial_Hair']
 
 
-              self.attr_model = Predictor('run22/epoch_9_loss_14.826.pth', len(self.face_attributes), device='cuda')
+              self.attr_model = Predictor('models/epoch_9_loss_14.826.pth', len(self.face_attributes), device='cuda')
 
 
        def proccess_video(self, video_path):
