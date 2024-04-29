@@ -45,6 +45,9 @@ def cluster_hdbscan(data, min_clusters=1, min_samples=1, plot_data=False):
     labels = clusterer.fit_predict(data)
     if plot_data:
         plot(data, labels, 'HDBSCAN')
+
+    if (labels == -1).all():
+        labels += 1
     return labels
 
 def cluster_optics(data, min_samples, plot_data=False):
