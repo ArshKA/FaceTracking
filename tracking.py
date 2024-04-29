@@ -24,14 +24,17 @@ class VideoProcessor:
 
 
        def proccess_video(self, video_path):
-              frames, embeddings, predictions, face_counts = process_video(video_path, self.attr_model, step=1, end=.1)
+              frames, embeddings, predictions, face_counts = process_video(video_path, self.attr_model)
               min_num_faces = round(np.percentile(face_counts, 5))
               min_num_faces = max(min_num_faces, 2)
 
-              labels = cluster_hdbscan(embeddings, min_num_faces, max(len(frames)//5, 1), plot_data=True)
               print(frames)
               print(embeddings)
               print(predictions)
+              print(min_num_faces)
+
+              labels = cluster_hdbscan(embeddings, min_num_faces, max(len(frames)//5, 1), plot_data=True)
+
               print(labels)
               grouped_bbox = group_bbox(frames, labels)
               average_preds = group_probabilities(predictions, labels)
