@@ -20,7 +20,7 @@ def group_probabilities(probs, labels):
     counts = np.zeros(labels_count)
 
     for i in range(len(labels)):
-        if i in probs:
+        if i in probs and labels[i] >= 0:
             class_probabilities[labels[i]] += probs[i]
             counts[labels[i]] += 1
 
