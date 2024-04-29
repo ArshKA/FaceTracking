@@ -13,9 +13,12 @@ def process_video(path, prediction_model, step=24, end=None, pred_freq = .2):
 
 
     cap = cv2.VideoCapture(path)
+    if not cap.isOpened():
+      raise Exception("Invalid Video: ", path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     step = min(total_frames//4, step)
+    print(step)
 
     frame_count = 0
     pred_idx = 0
@@ -58,7 +61,7 @@ def process_video(path, prediction_model, step=24, end=None, pred_freq = .2):
                     history[frame_count].append((pred_idx, (x, y, w, h)))
                     pred_idx += 1
 
-            pbar.update(1)
+            pbar.update(step)
             frame_count += step
             cap.set(cv2.CAP_PROP_POS_FRAMES, frame_count)
 

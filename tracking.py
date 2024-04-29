@@ -4,9 +4,7 @@ from grouping import group_bbox, group_probabilities, process_predictions
 import cv2
 from load_model import Predictor
 import numpy as np
-import os
 
-# os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 class VideoProcessor:
        def __init__(self):

@@ -35,7 +35,7 @@ class Predictor:
         resnet50_model.fc = nn.Linear(num_ftrs, attribute_count)
 
         # Load the pre-trained weights from the specified path
-        resnet50_model.load_state_dict(torch.load(model_path))
+        resnet50_model.load_state_dict(torch.load(model_path, map_location=self.device))
 
         # Move the model to the specified device and set to evaluation mode
         resnet50_model = resnet50_model.to(device)
@@ -59,7 +59,7 @@ class Predictor:
         input_tensor = self.transform(image_array)
         input_batch = input_tensor.unsqueeze(0)
 
-        torchvision.utils.save_image(denormalize(input_batch), 'media/img50.png')
+        # torchvision.utils.save_image(denormalize(input_batch), 'media/img50.png')
 
         # Move input tensor to the device
         input_batch = input_batch.to(self.device)
