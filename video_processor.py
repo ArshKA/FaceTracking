@@ -55,7 +55,7 @@ def process_video(path, prediction_model, step=24, end=None, pred_freq = .2):
 
                     embedding = np.array(DeepFace.represent(detected_face, model_name='Facenet512', enforce_detection=False)[0]['embedding'])
                     all_embeddings.append(embedding)
-                    if np.random.random() < pred_freq:
+                    if np.random.random() < pred_freq or pred_idx == 0:
                         predictions[pred_idx] = prediction_model.predict(detected_face)
                     face_counts[-1] += 1
                     history[frame_count].append((pred_idx, (x, y, w, h)))
