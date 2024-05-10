@@ -18,7 +18,6 @@ def process_video(path, prediction_model, step=24, end=None, pred_freq = .2):
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     step = min(total_frames//4, step)
-    print(step)
 
     frame_count = 0
     pred_idx = 0
@@ -51,12 +50,10 @@ def process_video(path, prediction_model, step=24, end=None, pred_freq = .2):
 
                     detected_face = frame[int(y):int(y+h), int(x):int(x+w)]
 
-
-
                     embedding = np.array(DeepFace.represent(detected_face, model_name='Facenet512', enforce_detection=False)[0]['embedding'])
                     all_embeddings.append(embedding)
                     if np.random.random() < pred_freq or pred_idx == 0:
-                        predictions[pred_idx] = prediction_model.predict(detected_face)
+                        predictions[pred_idx] = prediction_model.predict(cv2.cvtColor(detected_face, cv2.COLOR_RGB2BGR))
                     face_counts[-1] += 1
                     history[frame_count].append((pred_idx, (x, y, w, h)))
                     pred_idx += 1
