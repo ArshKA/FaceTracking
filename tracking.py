@@ -8,32 +8,23 @@ import numpy as np
 
 class VideoProcessor:
        def __init__(self):
-              self.face_attributes = ['Arched_Eyebrows', 'Bags_Under_Eyes', 'Bald', 'Bangs', 'Big_Lips',
-                     'Big_Nose', 'Black_Hair', 'Blond_Hair', 'Blurry', 'Brown_Hair',
-                     'Bushy_Eyebrows', 'Chubby', 'Double_Chin', 'Eyeglasses', 'Gray_Hair',
-                     'Heavy_Makeup', 'High_Cheekbones', 'Male', 'Mouth_Slightly_Open',
-                     'Mustache', 'Narrow_Eyes', 'Oval_Face', 'Pale_Skin', 'Pointy_Nose',
-                     'Receding_Hairline', 'Rosy_Cheeks', 'Smiling', 'Straight_Hair',
-                     'Wavy_Hair', 'Wearing_Hat', 'Wearing_Lipstick', 'Wearing_Necktie',
-                     'Young', 'Facial_Hair']
+              self.face_attributes = ['Arched_Eyebrows', 'Bags_Under_Eyes', 'Bald', 'Bangs', 'Big_Lips', 'Big_Nose', 'Black_Hair', 'Blond_Hair', 'Blurry', 'Brown_Hair',
+              'Bushy_Eyebrows', 'Chubby', 'Double_Chin', 'Eyeglasses', 'Gray_Hair', 'Heavy_Makeup', 'High_Cheekbones', 'Male', 'Mouth_Slightly_Open',
+              'Mustache', 'Narrow_Eyes', 'Oval_Face', 'Pale_Skin', 'Pointy_Nose', 'Receding_Hairline', 'Rosy_Cheeks', 'Smiling', 'Straight_Hair',
+              'Wavy_Hair', 'Wearing_Hat', 'Wearing_Lipstick', 'Wearing_Necktie', 'Young', 'Facial_Hair', 'Female', 'Male', 'Asian', 'Indian',
+              'Black', 'White', 'Middle Eastern', 'Hispanic']
 
 
-              self.attr_model = Predictor('models/epoch_9_loss_14.826.pth', len(self.face_attributes), device='cuda')
+              self.attr_model = Predictor('models/epoch_9_loss_14.826.pth', 34, device='cuda')
 
 
-       def proccess_video(self, video_path):
-              frames, embeddings, predictions, face_counts = process_video(video_path, self.attr_model)
+       def proccess_video(self, video_path, end=None):
+              frames, embeddings, predictions, face_counts = process_video(video_path, self.attr_model, end)
               min_num_faces = round(np.percentile(face_counts, 5))
               min_num_faces = max(min_num_faces, 2)
 
-              print(frames)
-              print(embeddings)
-              print(predictions)
-              print(min_num_faces)
-
               labels = cluster_hdbscan(embeddings, min_num_faces, max(len(frames)//5, 1), plot_data=True)
 
-              print(labels)
               grouped_bbox = group_bbox(frames, labels)
               average_preds = group_probabilities(predictions, labels)
 
