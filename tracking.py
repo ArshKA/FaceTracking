@@ -19,7 +19,7 @@ class VideoProcessor:
 
 
        def proccess_video(self, video_path, end=None):
-              frames, embeddings, predictions, face_counts = process_video(video_path, self.attr_model, end)
+              frames, embeddings, predictions, face_counts = process_video(video_path, self.attr_model, end=end)
               min_num_faces = round(np.percentile(face_counts, 5))
               min_num_faces = max(min_num_faces, 2)
 
