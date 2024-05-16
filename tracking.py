@@ -23,7 +23,7 @@ class VideoProcessor:
               min_num_faces = round(np.percentile(face_counts, 5))
               min_num_faces = max(min_num_faces, 2)
 
-              labels = cluster_hdbscan(embeddings, min_num_faces, max(len(frames)//5, 1), plot_data=True)
+              labels = cluster_hdbscan(embeddings, min_num_faces, max(len(frames)//5, 1), plot_data=False)
 
               grouped_bbox = group_bbox(frames, labels)
               average_preds = group_probabilities(predictions, labels)
